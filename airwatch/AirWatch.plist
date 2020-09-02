@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginName</key>
+	<string>AirWatch</string>
+	<key>PluginUUID</key>
+	<string>2761E5A2-6D4B-4687-AA42-2D396AE2FC97</string>
+	<key>PluginVersion</key>
+	<string>1.0.0.0</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>AirWatch.plugin</string>
+	</array>
+</dict>
+</plist>

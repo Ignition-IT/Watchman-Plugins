@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginName</key>
+	<string>Umbrella DNS</string>
+	<key>PluginUUID</key>
+	<string>04B5C694-B132-43AA-8106-799C4D9F99B3</string>
+	<key>PluginVersion</key>
+	<string>1.0.0.0</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>umbrella_dns.plugin</string>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+#macOS Updates plugin v1.3.0.0
+#written by ELla Hansen for Ignition www.ignitionit.net
+
+# Sets UPDATECHECK to the stderr output and discards the stdout
+UPDATECHECK=$((softwareupdate -l) 2>&1 | grep -vE '^(Software|Finding)' | grep -v '\*' | grep .)
+ 
+PRODUCTVERSION=$(sw_vers -productVersion)
+BUILDVERSION=$(sw_vers -buildVersion)
+
+if [ "$UPDATECHECK" = "No new software available." ]; then
+	echo "macOS $PRODUCTVERSION ($BUILDVERSION) is up to date"
+	exit 0
+
+elif [[ "$UPDATECHECK" =~ "macOS" ]]; then
+	echo "macOS updates are available: $UPDATECHECK"
+	exit 2
+
+elif [[ "$UPDATECHECK" =~ "Security" ]]; then
+	echo "macOS updates are available: $UPDATECHECK"
+	exit 2
+
+elif [[ "$UPDATECHECK" =~ "connect" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+elif [[ "$UPDATECHECK" =~ "hostname" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+elif [[ "$UPDATECHECK" =~ "response" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+elif [[ "$UPDATECHECK" =~ "loading" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+elif [[ "$UPDATECHECK" =~ "connection" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+elif [[ "$UPDATECHECK" =~ "request" ]]; then
+	echo "$UPDATECHECK"
+	exit 20
+
+else
+	echo "macOS $PRODUCTVERSION ($BUILDVERSION) is up to date"
+	echo "Other software updates are available: $UPDATECHECK"
+	exit 20
+fi

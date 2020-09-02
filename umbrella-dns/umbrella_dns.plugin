@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#Umbrella DNS plugin v1.0.0.0
+#written by ELla Hansen for Ignition www.ignitionit.net
+
+# Sets UPDATECHECK to the stderr output and discards the stdout
+DEVICEID=$(/usr/libexec/PlistBuddy -c "Print :deviceID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
+ORGID=$(/usr/libexec/PlistBuddy -c "Print :orgID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
+STATE=$(/usr/libexec/PlistBuddy -c "Print :state" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
+
+if [[ "$UPDATECHECK" =~ "Does Not Exist" ]]; then
+	echo "Umbrella not found"
+	exit 20
+
+else
+	echo "Status: $STATE"
+	echo "Org ID: $ORGID"
+	echo "Device ID: $DEVICEID"
+	exit 0
+fi
