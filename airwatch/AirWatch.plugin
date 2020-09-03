@@ -9,19 +9,19 @@ MDMINSTALLED=$(profiles status -type enrollment | grep "MDM enrollment:" | cut -
 SN=$(ioreg -l | grep IOPlatformSerialNumber | cut -d'"' -f4)
 
 if [ "$MDMINSTALLED" = "Yes" ] && [ "$HUBINSTALLED" = "Yes" ]; then
-	echo "$MDM\nHub installed: $HUBINSTALLED\nURL: https://cn700.awmdm.com/AirWatch/#/AirWatch/Search?query=$SN"
+	echo "$MDM\nHub installed: $HUBINSTALLED"
 	exit 0
 
 elif [ "$MDMINSTALLED" = "Yes" ] && [ "$HUBINSTALLED" = "No" ]; then
-	echo "$MDM\nHub installed: $HUBINSTALLED\nURL: https://cn700.awmdm.com/AirWatch/#/AirWatch/Search?query=$SN"
+	echo "$MDM\nHub installed: $HUBINSTALLED"
 	exit 2
 
 elif [ "$MDMINSTALLED" = "No" ] && [ "$HUBINSTALLED" = "Yes" ]; then
-	echo "$MDM\nHub installed: $HUBINSTALLED\nURL: https://cn700.awmdm.com/AirWatch/#/AirWatch/Search?query=$SN"
+	echo "$MDM\nHub installed: $HUBINSTALLED"
 	exit 2
 
 elif [ "$MDMINSTALLED" = "No" ] && [ "$HUBINSTALLED" = "No" ]; then
-	echo "$MDM\nHub installed: $HUBINSTALLED\nURL: https://cn700.awmdm.com/AirWatch/#/AirWatch/Search?query=$SN"
+	echo "$MDM\nHub installed: $HUBINSTALLED"
 	exit 2
 
 else

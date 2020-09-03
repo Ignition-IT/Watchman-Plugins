@@ -1,0 +1,30 @@
+#!/bin/sh
+
+#SentinelOne plugin v1.0.0.0
+#written by Ella Hansen for Ignition www.ignitionit.net
+
+UUID=$(sentinelctl status --filters agent | grep -o 'ID:.*' | cut -d: -f2 | sed 's: ::g')
+VERSION=$(sentinelctl status --filters agent | grep -o 'Version:.*' | cut -d: -f2 | sed 's: ::g')
+PROTECTION=$(sentinelctl status --filters agent | grep -o 'Protection:.*' | cut -d: -f2 | sed 's: ::g')
+INFECTED=$(sentinelctl status --filters agent | grep -o 'Infected:.*' | cut -d: -f2 | sed 's: ::g')
+READY=$(sentinelctl status --filters agent | grep -o 'Ready:.*' | cut -d: -f2 | sed 's: ::g')
+
+if [ "$PROTECTION" = "enabled" ] && [ "$READY" = "yes" ] && [ "$INFECTED" = "no" ]; then
+	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
+	exit 0
+
+elif [ "$INFECTED" != "no" ]; then
+	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
+	exit 2
+
+elif [ "$PROTECTION" != "enabled" ]; then
+	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
+	exit 20
+
+elif [ "$READY" != "yes" ]; then
+	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
+	exit 20
+
+else
+	exit 0
+fi
