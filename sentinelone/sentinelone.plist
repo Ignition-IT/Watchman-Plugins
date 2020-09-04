@@ -4,6 +4,8 @@
 <dict>
 	<key>PluginName</key>
 	<string>SentinelOne</string>
+	<key>PluginSlug</key>
+	<string>sentinelone</string>
 	<key>PluginUUID</key>
 	<string>6B006534-1EA5-49F9-A9E0-77643D7B89D2</string>
 	<key>PluginVersion</key>
