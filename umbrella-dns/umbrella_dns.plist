@@ -4,6 +4,8 @@
 <dict>
 	<key>PluginName</key>
 	<string>Umbrella DNS</string>
+	<key>PluginSlug</key>
+	<string>umbrella-dns</string>
 	<key>PluginUUID</key>
 	<string>04B5C694-B132-43AA-8106-799C4D9F99B3</string>
 	<key>PluginVersion</key>
