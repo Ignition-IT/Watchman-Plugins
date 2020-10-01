@@ -17,11 +17,11 @@ elif [ "$INFECTED" != "no" ]; then
 	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
 	exit 2
 
-elif [ "$PROTECTION" != "enabled" ]; then
-	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
-	exit 20
-
 elif [ "$READY" != "yes" ]; then
+	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
+	exit 2
+
+elif [ "$PROTECTION" != "enabled" ]; then
 	echo "Version: $VERSION\nReady: $READY\nProtection: $PROTECTION\nInfected: $INFECTED\nUUID: $UUID"
 	exit 20
 

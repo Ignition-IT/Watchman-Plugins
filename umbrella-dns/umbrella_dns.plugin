@@ -6,14 +6,29 @@
 DEVICEID=$(/usr/libexec/PlistBuddy -c "Print :deviceID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 ORGID=$(/usr/libexec/PlistBuddy -c "Print :orgID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 STATE=$(/usr/libexec/PlistBuddy -c "Print :state" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
+TUNNEL=$(/usr/libexec/PlistBuddy -c "Print :tunnelStatus" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 
-if [[ "$DEVICEID" =~ "Does Not Exist" ]]; then
-	echo "Umbrella not found"
+if [[ "$STATE" == "encrypted" && "$TUNNEL" =~ "Protected" ]]; then
+	echo "Status: $STATE"
+	echo "$TUNNEL"
+	echo "Org ID: $ORGID"
+	echo "Device ID: $DEVICEID"
+	exit 0
+
+elif [[ "$STATE" == "disabled" ]]; then
+	echo "Status: $STATE"
+	echo "$TUNNEL"
+	echo "Org ID: $ORGID"
+	echo "Device ID: $DEVICEID"
+	exit 20
+
+elif [[ "$TUNNEL" =~ "Unprotected" ]]; then
+	echo "Status: $STATE"
+	echo "$TUNNEL"
+	echo "Org ID: $ORGID"
+	echo "Device ID: $DEVICEID"
 	exit 20
 
 else
-	echo "Status: $STATE"
-	echo "Org ID: $ORGID"
-	echo "Device ID: $DEVICEID"
 	exit 0
 fi
