@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#macOS Updates plugin v1.3.0.0
+#macOS Updates plugin v1.4.0.0
 #written by ELla Hansen for Ignition www.ignitionit.net
 
 # Sets UPDATECHECK to the stderr output and discards the stdout
