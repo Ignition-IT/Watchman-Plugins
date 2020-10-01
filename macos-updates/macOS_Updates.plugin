@@ -15,11 +15,11 @@ if [ "$UPDATECHECK" = "No new software available." ]; then
 
 elif [[ "$UPDATECHECK" =~ "macOS" ]]; then
 	echo "macOS updates are available: $UPDATECHECK"
-	exit 2
+	exit 20
 
 elif [[ "$UPDATECHECK" =~ "Security" ]]; then
 	echo "macOS updates are available: $UPDATECHECK"
-	exit 2
+	exit 20
 
 elif [[ "$UPDATECHECK" =~ "connect" ]]; then
 	echo "$UPDATECHECK"
