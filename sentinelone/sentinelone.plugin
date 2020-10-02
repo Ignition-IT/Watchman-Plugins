@@ -1,7 +1,14 @@
 #!/bin/sh
 
-#SentinelOne plugin v1.0.0.0
+#SentinelOne plugin v1.1.0.0
 #written by Ella Hansen for Ignition www.ignitionit.net
+
+UPDATECHECK=$((sentinelctl status) 2>&1)
+
+if [[ "$UPDATECHECK" =~ "command not found" ]]; then
+	echo "SentinelOne agent not found"
+	exit 2
+fi
 
 UUID=$(sentinelctl status --filters agent | grep -o 'ID:.*' | cut -d: -f2 | sed 's: ::g')
 VERSION=$(sentinelctl status --filters agent | grep -o 'Version:.*' | cut -d: -f2 | sed 's: ::g')
