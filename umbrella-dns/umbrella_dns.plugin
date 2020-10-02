@@ -1,21 +1,28 @@
 #!/bin/sh
 
-#Umbrella DNS plugin v1.0.0.0
+#Umbrella DNS plugin v1.1.0.0
 #written by ELla Hansen for Ignition www.ignitionit.net
+
+INSTALLED=$(test -e /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist && echo "Yes" || echo "No")
+
+if [ "$INSTALLED" = "No" ]; then
+	echo "Umbrella DNS not found"
+	exit 2
+fi
 
 DEVICEID=$(/usr/libexec/PlistBuddy -c "Print :deviceID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 ORGID=$(/usr/libexec/PlistBuddy -c "Print :orgID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 STATE=$(/usr/libexec/PlistBuddy -c "Print :state" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 TUNNEL=$(/usr/libexec/PlistBuddy -c "Print :tunnelStatus" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
 
-if [[ "$STATE" == "encrypted" && "$TUNNEL" =~ "Protected" ]]; then
+if [[ "$STATE" = "encrypted" && "$TUNNEL" =~ "Protected" ]]; then
 	echo "Status: $STATE"
 	echo "$TUNNEL"
 	echo "Org ID: $ORGID"
 	echo "Device ID: $DEVICEID"
 	exit 0
 
-elif [[ "$STATE" == "disabled" ]]; then
+elif [[ "$STATE" != "encrypted" ]]; then
 	echo "Status: $STATE"
 	echo "$TUNNEL"
 	echo "Org ID: $ORGID"
