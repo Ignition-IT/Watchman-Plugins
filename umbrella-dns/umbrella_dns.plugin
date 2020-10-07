@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#Umbrella DNS plugin v1.1.0.0
-#written by ELla Hansen for Ignition www.ignitionit.net
+# Umbrella DNS plugin v1.3.0.0
+# written by ELla Hansen for Ignition www.ignitionit.net
 
 INSTALLED=$(test -e /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist && echo "Yes" || echo "No")
 
@@ -10,32 +10,51 @@ if [ "$INSTALLED" = "No" ]; then
 	exit 2
 fi
 
-DEVICEID=$(/usr/libexec/PlistBuddy -c "Print :deviceID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
-ORGID=$(/usr/libexec/PlistBuddy -c "Print :orgID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
-STATE=$(/usr/libexec/PlistBuddy -c "Print :state" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
-TUNNEL=$(/usr/libexec/PlistBuddy -c "Print :tunnelStatus" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist)
+SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist && echo "Yes" || echo "No")
 
-if [[ "$STATE" = "encrypted" && "$TUNNEL" =~ "Protected" ]]; then
-	echo "Status: $STATE"
-	echo "$TUNNEL"
-	echo "Org ID: $ORGID"
-	echo "Device ID: $DEVICEID"
-	exit 0
+if [ "$SETTINGS" = "No" ]; then
+	/usr/libexec/PlistBuddy -c "Add :lastEnabled date `date`" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :hoursAllowed integer 24" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null
+fi
 
-elif [[ "$STATE" != "encrypted" ]]; then
-	echo "Status: $STATE"
-	echo "$TUNNEL"
-	echo "Org ID: $ORGID"
-	echo "Device ID: $DEVICEID"
-	exit 20
+# supress error message if tunnelStatus doesn't exist
+DEVICEID=$(/usr/libexec/PlistBuddy -c "Print :deviceID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist 2>/dev/null)
+ORGID=$(/usr/libexec/PlistBuddy -c "Print :orgID" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist 2>/dev/null)
+STATE=$(/usr/libexec/PlistBuddy -c "Print :state" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist 2>/dev/null)
+TUNNEL=$(/usr/libexec/PlistBuddy -c "Print :tunnelStatus" /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist 2>/dev/null)
+# save the exit code, which indicates success or failure
+TUNNELSTATUS=$?
 
-elif [[ "$TUNNEL" =~ "Unprotected" ]]; then
-	echo "Status: $STATE"
-	echo "$TUNNEL"
-	echo "Org ID: $ORGID"
-	echo "Device ID: $DEVICEID"
-	exit 20
+LASTENABLED=$(/usr/libexec/PlistBuddy -c "Print :lastEnabled" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null)
+HOURSALLOWED=$(/usr/libexec/PlistBuddy -c "Print :hoursAllowed" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null)
+# convert to unix timestamps
+LASTENABLEDTS=$((`date -j -f "%a %b %d %T %Z %Y" "$LASTENABLED" "+%s"` - 3600 ))
+LASTENABLEDDATE=$(date -j -r "$LASTENABLEDTS" "+%D %l:%M%p")
+CURRENTTS=$(date "+%s")
+SECONDSDISABLED=$(( $CURRENTTS - $LASTENABLEDTS ))
+SECONDSALLOWED=$(( $HOURSALLOWED * 3600 ))
 
+# if tunnelStatus exists, add data to report
+if (( TUNNELSTATUS == 0 )); then
+	REPORT="Status: $STATE\n$TUNNEL\nLast Enabled: $LASTENABLEDDATE\nOrg ID: $ORGID\nDevice ID: $DEVICEID"
+# else exlude tunnel info
 else
+	REPORT="Status: $STATE\nLast Enabled: $LASTENABLEDDATE\nOrg ID: $ORGID\nDevice ID: $DEVICEID"
+fi
+
+# if not enabled for more than the specified allowed hours, alert
+if [[ "$STATE" != "encrypted" ]] && (( SECONDSDISABLED > SECONDSALLOWED )); then
+	echo "Umbrella has been disabled for over $HOURSALLOWED hours\n\n$REPORT"
+	exit 2
+
+# else if not enabled, but within allowed number of hours, warn
+elif [[ "$STATE" != "encrypted" ]]; then
+	echo "$REPORT"
+	exit 20
+
+# else report ok
+else
+	/usr/libexec/PlistBuddy -c "Set :lastEnabled `date`" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist
+	echo "$REPORT"
 	exit 0
 fi
