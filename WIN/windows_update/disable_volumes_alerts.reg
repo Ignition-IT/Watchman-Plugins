@@ -1,0 +1,19 @@
+Windows Registry Editor Version 5.00
+
+; report all drives and don't report on removable drives in Volumes plugin
+
+; 64 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\volumes]
+"ReportAllDrives"="1"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\volumes]
+"MonitorRemovableDrives"="0"
+
+; 32 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\volumes]
+"ReportAllDrives"="1"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\volumes]
+"MonitorRemovableDrives"="0"

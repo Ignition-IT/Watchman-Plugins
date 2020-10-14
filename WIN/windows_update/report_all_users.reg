@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+; report all users in Users plugin
+
+; 64 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\users]
+"ReportAllUsers"="1"
+
+; 32 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\users]
+"ReportAllUsers"="1"

@@ -2,7 +2,7 @@ Windows Registry Editor Version 5.00
 
 ; disable warnings for Windows Update plugin
 
-; Windows Update 64 Bit
+; 64 Bit
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\windows_update]
 "ReportHighPri"="0"
@@ -16,7 +16,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\windows_update]
 "IncludeMinorList"="1"
 
-; Windows Update 32 Bit
+; 32 Bit
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\windows_update]
 "ReportHighPri"="0"

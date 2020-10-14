@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+; disable RAM warnings for VM plugin
+
+; 64 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\VM]
+"ReportRAMChanges"="0"
+
+; 32 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\VM]
+"ReportRAMChanges"="0"

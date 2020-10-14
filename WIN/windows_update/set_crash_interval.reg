@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+; set count to 10 in System Crash plugin
+
+; 64 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\MonitoringClient\Plugins\SystemCrash]
+"CrashInterval"="10"
+
+; 32 Bit
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\SystemCrash]
+"CrashInterval"="10"
