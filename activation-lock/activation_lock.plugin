@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Activation Lock plugin v1.0.0.0
+# written by ELla Hansen for Ignition www.ignitionit.com
+
+ACTIVATIONLOCKSTATUS=$(/usr/sbin/system_profiler SPHardwareDataType | awk '/Activation Lock Status/{print $NF}')
+
+#get Apple ID email, name, and management status
+CURRENTUSER=$(/usr/bin/stat -f%Su /dev/console)
+
+APPLEIDEMAIL=$(/usr/libexec/PlistBuddy -c "print :Accounts:0:AccountID" /Users/$CURRENTUSER/Library/Preferences/MobileMeAccounts.plist 2>/dev/null)
+APPLEIDEXISTS=$?
+APPLEIDNAME=$(/usr/libexec/PlistBuddy -c "print :Accounts:0:DisplayName" /Users/$CURRENTUSER/Library/Preferences/MobileMeAccounts.plist 2>/dev/null)
+APPLEIDMANAGED=$(/usr/libexec/PlistBuddy -c "print :Accounts:0:isManagedAppleID" /Users/$CURRENTUSER/Library/Preferences/MobileMeAccounts.plist 2>/dev/null)
+
+if [ "$APPLEIDMANAGED" = "false" ]; then
+	APPLEIDMANAGED="False"
+elif [ "$APPLEIDMANAGED" = "true" ]; then
+	APPLEIDMANAGED="True"
+fi
+
+#data to report
+REPORT="Display Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+
+# if activation lock is enabled but no Apple ID is detected
+if (( $APPLEIDEXISTS == 1 )) && [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ]; then
+	echo "Activation Lock is enabled but the current user is not signed into iCloud\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+	exit 20
+
+# if activation lock is disabled and no Apple ID is detected
+elif (( $APPLEIDEXISTS == 1 )) && [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
+	echo "Activation Lock is disabled and the current user is not signed into iCloud\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+	exit 0
+
+# if activation lock is enabled and Apple ID is NOT managed, report alert
+elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "False" ]; then
+	echo "Activation Lock is enabled with an unmanaged Apple ID\n\n$REPORT"
+	exit 2
+
+# if activation lock is enabled and Apple ID is managed, report warning
+elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "True" ]; then
+	echo "Activation Lock is enabled with a managed Apple ID\n\n$REPORT"
+	exit 20
+
+# if activation lock is disabled, report ok
+elif [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
+	echo "Activation Lock is disabled\n\n$REPORT"
+	exit 0
+
+else
+	exit 0
+fi
