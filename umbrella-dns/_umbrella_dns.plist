@@ -9,10 +9,10 @@
 	<key>PluginUUID</key>
 	<string>04B5C694-B132-43AA-8106-799C4D9F99B3</string>
 	<key>PluginVersion</key>
-	<string>1.3.0.0</string>
+	<string>1.3.0.1</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>umbrella_dns.plugin</string>
+		<string>_umbrella_dns.plugin</string>
 	</array>
 </dict>
 </plist>

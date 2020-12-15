@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Umbrella DNS plugin v1.3.0.0
-# written by ELla Hansen for Ignition www.ignitionit.net
+# Umbrella DNS plugin v1.3.0.1
+# written by ELla Hansen for Ignition www.ignitionit.com
 
 INSTALLED=$(test -e /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist && echo "Yes" || echo "No")
 

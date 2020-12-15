@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>PluginName</key>
-	<string>AirWatch</string>
+	<string>User Accounts</string>
 	<key>PluginSlug</key>
-	<string>airwatch</string>
+	<string>user-accounts</string>
 	<key>PluginUUID</key>
-	<string>2761E5A2-6D4B-4687-AA42-2D396AE2FC97</string>
+	<string>3DDE4C8D-8078-44A6-9E26-C66FEDB12371</string>
 	<key>PluginVersion</key>
 	<string>1.0.0.0</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>AirWatch.plugin</string>
+		<string>_user_accounts.plugin</string>
 	</array>
 </dict>
 </plist>

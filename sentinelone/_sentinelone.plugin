@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#SentinelOne plugin v1.2.0.0
-#written by Ella Hansen for Ignition www.ignitionit.net
+#SentinelOne plugin v1.2.0.1
+#written by Ella Hansen for Ignition www.ignitionit.com
 
 UPDATECHECK=$((sentinelctl status) 2>&1)
 

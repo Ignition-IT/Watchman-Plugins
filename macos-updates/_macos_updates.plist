@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>PluginName</key>
-	<string>Activation Lock</string>
+	<string>macOS Updates</string>
 	<key>PluginSlug</key>
-	<string>activation-lock</string>
+	<string>macos-updates</string>
 	<key>PluginUUID</key>
-	<string>E2E1633E-B763-4EA0-8F68-49334FF75E51</string>
+	<string>E475A6BC-39F5-4CF9-8A63-B9A241734092</string>
 	<key>PluginVersion</key>
-	<string>1.0.0.0</string>
+	<string>1.4.0.1</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>activation_lock.plugin</string>
+		<string>_macos_updates.plugin</string>
 	</array>
 </dict>
 </plist>

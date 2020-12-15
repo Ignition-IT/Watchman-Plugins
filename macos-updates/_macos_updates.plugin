@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#macOS Updates plugin v1.4.0.0
-#written by ELla Hansen for Ignition www.ignitionit.net
+#macOS Updates plugin v1.4.0.1
+#written by ELla Hansen for Ignition www.ignitionit.com
 
 # Sets UPDATECHECK to the stderr output and discards the stdout
 UPDATECHECK=$((softwareupdate -l) 2>&1 | grep -vE '^(Software|Finding)' | grep -v '\*' | grep .)
