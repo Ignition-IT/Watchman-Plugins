@@ -13,8 +13,8 @@ fi
 SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist && echo "Yes" || echo "No")
 
 if [ "$SETTINGS" = "No" ]; then
-	/usr/libexec/PlistBuddy -c "Add :lastEnabled date `date`" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null
-	/usr/libexec/PlistBuddy -c "Add :hoursAllowed integer 24" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :lastEnabled date `date`" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :hoursAllowed integer 24" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist 2>/dev/null
 fi
 
 # supress error message if tunnelStatus doesn't exist
@@ -54,7 +54,7 @@ elif [[ "$STATE" != "encrypted" ]]; then
 
 # else report ok
 else
-	/usr/libexec/PlistBuddy -c "Set :lastEnabled `date`" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist
+	/usr/libexec/PlistBuddy -c "Set :lastEnabled `date`" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist
 	echo "$REPORT"
 	exit 0
 fi
