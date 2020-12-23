@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Activation Lock plugin v1.1.0.0
-# written by ELla Hansen for Ignition www.ignitionit.com
+# written by Ella Hansen for Ignition www.ignitionit.com
 
 FMMSTATUS=$(nvram -p | awk '/fmm-mobileme-token-FMM-BridgeHasAccount/{print $NF}')
 if [ "$FMMSTATUS" = "BridgeHasAccountValue" ]; then
@@ -56,7 +56,7 @@ elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "False" ];
 # if FMM is enabled and Apple ID is NOT managed, report alert
 elif [ "$FMMSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "False" ]; then
 	echo "Find My Mac is enabled with an unmanaged Apple ID\n\n$REPORT"
-	exit 2
+	exit 20
 
 # if activation lock is enabled and Apple ID is managed, report warning
 elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "True" ]; then
