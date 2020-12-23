@@ -63,4 +63,5 @@ cat "$USERLIST"
 #clean up the temp file
 rm "$USERLIST" 2>/dev/null
 
+#return OK
 exit 0
