@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#AirWatch plugin v1.0.0.0
-#written by Ella Hansen for Ignition www.ignitionit.net
+#AirWatch plugin v1.0.0.1
+#written by Ella Hansen for Ignition www.ignitionit.com
 
 HUBINSTALLED=$(test -e /Library/Application\ Support/AirWatch/hubd && echo "Yes" || echo "No")
 MDM=$(profiles status -type enrollment)

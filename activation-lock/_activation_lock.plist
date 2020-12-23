@@ -9,7 +9,7 @@
 	<key>PluginUUID</key>
 	<string>E2E1633E-B763-4EA0-8F68-49334FF75E51</string>
 	<key>PluginVersion</key>
-	<string>1.0.0.1</string>
+	<string>1.1.0.0</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>_activation_lock.plugin</string>

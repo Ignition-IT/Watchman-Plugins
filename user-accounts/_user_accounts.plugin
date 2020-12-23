@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# User Accounts plugin v1.0.0.0
+# written by ELla Hansen for Ignition www.ignitionit.com
+
+#set temp file
+USERLIST="/tmp/wm_user_accounts_$(date +%s)"
+echo "Current user" >> "$USERLIST"
+
+#get account info for specified username
+GETUSERINFO () {
+	local USERNAME="$1"
+	#get account name from username
+	local ACCOUNTNAME=$(id -F $USERNAME)
+
+	#check last login time
+	LASTLOGIN=$(last -1 $USERNAME | grep -o -E '\b[[:upper:]].*')
+
+	#check Secure Token status
+	local SECURETOKENSTATUS=$(sysadminctl -secureTokenStatus $USERNAME 2>&1)
+	if grep 'DISABLED' <<< "$SECURETOKENSTATUS" > /dev/null; then
+		#is disabled
+		local SECURETOKENSTATUS="Disabled"
+	elif grep 'ENABLED' <<< "$SECURETOKENSTATUS" > /dev/null; then
+		#is enabled
+		local SECURETOKENSTATUS="Enabled"
+	else
+		#catch error
+		local SECURETOKENSTATUS="Unknown"
+	fi
+
+	#check if user is admin
+	if id -Gn $USERNAME | grep -q -w admin; then 
+    	#is admin
+    	local ACCOUNTTYPE="Admin" 
+	else 
+    	#is standard
+    	local ACCOUNTTYPE="Standard" 
+	fi
+
+	#add info to file
+	echo "\nFull Name: $ACCOUNTNAME\nUsername: $USERNAME\nAccount Type: $ACCOUNTTYPE\nSecure Token: $SECURETOKENSTATUS\nLast Login: $LASTLOGIN" >> "$USERLIST"
+}
+
+#get current username
+CURRENTUSER=$(stat -f '%Su' /dev/console)
+GETUSERINFO $CURRENTUSER
+echo "\nOther users" >> "$USERLIST"
+
+#get full list of users with UID > 500
+USERNAMES=$(dscacheutil -q user | grep -B 2 -e uid:\ 5'[0-9][0-9]' | grep ^'name: ' | awk -F ': ' '{print $NF}')
+# remove current username from the full list
+USERNAMES=$(grep -v $CURRENTUSER <<< "$USERNAMES")
+
+# run the list
+for USERNAME in $(echo $USERNAMES); do
+	GETUSERINFO $USERNAME
+done
+
+#print the output from the temp file
+cat "$USERLIST"
+
+#clean up the temp file
+rm "$USERLIST" 2>/dev/null
+
+#return OK
+exit 0

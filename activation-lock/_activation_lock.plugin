@@ -1,9 +1,19 @@
 #!/bin/sh
 
-# Activation Lock plugin v1.0.0.1
-# written by ELla Hansen for Ignition www.ignitionit.com
+# Activation Lock plugin v1.1.0.0
+# written by Ella Hansen for Ignition www.ignitionit.com
+
+FMMSTATUS=$(nvram -p | awk '/fmm-mobileme-token-FMM-BridgeHasAccount/{print $NF}')
+if [ "$FMMSTATUS" = "BridgeHasAccountValue" ]; then
+	FMMSTATUS="Enabled"
+else
+	FMMSTATUS="Disabled"
+fi
 
 ACTIVATIONLOCKSTATUS=$(/usr/sbin/system_profiler SPHardwareDataType | awk '/Activation Lock Status/{print $NF}')
+if [ -z "$ACTIVATIONLOCKSTATUS" ]; then
+	ACTIVATIONLOCKSTATUS="Not Supported"
+fi
 
 #get Apple ID email, name, and management status
 CURRENTUSER=$(/usr/bin/stat -f%Su /dev/console)
@@ -20,31 +30,52 @@ elif [ "$APPLEIDMANAGED" = "true" ]; then
 fi
 
 #data to report
-REPORT="Display Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+REPORT="Apple ID Information\nDisplay Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+
 
 # if activation lock is enabled but no Apple ID is detected
-if (( $APPLEIDEXISTS == 1 )) && [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ]; then
-	echo "Activation Lock is enabled but the current user is not signed into iCloud\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+if (( $APPLEIDEXISTS != 0 )) && [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ]; then
+	echo "Activation Lock is enabled but the current user is not signed into iCloud\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+	exit 20
+
+# if FMM is enabled but no Apple ID is detected
+elif (( $APPLEIDEXISTS != 0 )) && [ "$FMMSTATUS" = "Enabled" ]; then
+	echo "Find My Mac is enabled but the current user is not signed into iCloud\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS"
 	exit 20
 
 # if activation lock is disabled and no Apple ID is detected
-elif (( $APPLEIDEXISTS == 1 )) && [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
-	echo "Activation Lock is disabled and the current user is not signed into iCloud\n\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+elif (( $APPLEIDEXISTS != 0 )) && [ "$FMMSTATUS" = "Disabled" ]; then
+	echo "Find My Mac is disabled and the current user is not signed into iCloud\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS"
 	exit 0
 
-# if activation lock is enabled and Apple ID is NOT managed, report alert
+# if Activation Lock is enabled and Apple ID is NOT managed, report alert
 elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "False" ]; then
 	echo "Activation Lock is enabled with an unmanaged Apple ID\n\n$REPORT"
 	exit 2
+
+# if FMM is enabled and Apple ID is NOT managed, report alert
+elif [ "$FMMSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "False" ]; then
+	echo "Find My Mac is enabled with an unmanaged Apple ID\n\n$REPORT"
+	exit 20
 
 # if activation lock is enabled and Apple ID is managed, report warning
 elif [ "$ACTIVATIONLOCKSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "True" ]; then
 	echo "Activation Lock is enabled with a managed Apple ID\n\n$REPORT"
 	exit 20
 
+# if FMM is enabled and Apple ID is managed, report warning
+elif [ "$FMMSTATUS" = "Enabled" ] && [ "$APPLEIDMANAGED" = "True" ]; then
+	echo "Find My Mac is enabled with a managed Apple ID\n\n$REPORT"
+	exit 20
+
 # if activation lock is disabled, report ok
-elif [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
-	echo "Activation Lock is disabled\n\n$REPORT"
+elif [ "$FMMSTATUS" = "Disabled" ] && [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
+	echo "Find My Mac and Activation Lock are disabled\n\n$REPORT"
+	exit 0
+
+# if activation lock is disabled, report ok
+elif [ "$FMMSTATUS" = "Disabled" ] && [ "$ACTIVATIONLOCKSTATUS" = "Disabled" ]; then
+	echo "Find My Mac is disabled\n\n$REPORT"
 	exit 0
 
 else
