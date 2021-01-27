@@ -1,0 +1,19 @@
+{
+  "exit_status": 20,
+  "visible": true,
+  "metadata": [
+    {
+      "name": "automatic_update_status",
+      "datatype": "string",
+      "visible": true,
+      "identifier": null,
+      "include_in_warnings": false,
+      "value": null,
+      "children": []
+    }
+  ],
+  "Attributes": {},
+  "Expirations": [],
+  "Settings": {},
+  "Summary": "The update client is disabled"
+}
