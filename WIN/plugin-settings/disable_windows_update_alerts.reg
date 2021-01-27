@@ -28,4 +28,8 @@ Windows Registry Editor Version 5.00
 "IncludeMajorList"="1"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\MonitoringClient\Plugins\windows_update]
+<<<<<<< Updated upstream
 "IncludeMinorList"="1"
+=======
+"IncludeMinorList"="1"
+>>>>>>> Stashed changes
