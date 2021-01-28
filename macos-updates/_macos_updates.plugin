@@ -36,7 +36,7 @@ elif [[ ! -z "$OTHERUPDATES" ]]; then
 	exit 20
 
 else
-	echo "Info:\n\n$UPDATECHECK"
+	echo "Error: $UPDATECHECK"
 	exit 20
 
 fi
