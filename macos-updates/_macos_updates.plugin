@@ -1,52 +1,42 @@
 #!/bin/sh
 
-#macOS Updates plugin v1.4.0.1
+#macOS Updates plugin v1.5.0.0
 #written by ELla Hansen for Ignition www.ignitionit.com
 
 # Sets UPDATECHECK to the stderr output and discards the stdout
-UPDATECHECK=$((softwareupdate -l) 2>&1 | grep -vE '^(Software|Finding)' | grep -v '\*' | grep .)
- 
-PRODUCTVERSION=$(sw_vers -productVersion)
-BUILDVERSION=$(sw_vers -buildVersion)
+UPDATECHECK=$((softwareupdate -l) 2>&1)
+# Only return lines that start with "*", remove "* ", "Label: ", and "-"
+UPDATES=$(echo "$UPDATECHECK" | grep '\*' | sed -e 's/*/•/g' -e 's/Label: //g' -e 's/- //g')
+# find lines with "macOS"
+MACOSUPDATES=$(echo "$UPDATES" | grep 'macOS')
+# find lines with "Security"
+SECURITYUPDATES=$(echo "$UPDATES" | grep 'Security')
+# find lines without "macOS" or "Security"
+OTHERUPDATES=$(echo "$UPDATES" | grep -vE '(macOS|Security)')
 
-if [ "$UPDATECHECK" = "No new software available." ]; then
-	echo "macOS $PRODUCTVERSION ($BUILDVERSION) is up to date"
+OUTPUT="Updates are available" 
+[[ ! -z "$MACOSUPDATES" ]] && OUTPUT="$OUTPUT\n\nmacOS updates:\n$MACOSUPDATES"
+[[ ! -z "$SECURITYUPDATES" ]] && OUTPUT="$OUTPUT\n\nSecurity updates:\n$SECURITYUPDATES"
+[[ ! -z "$OTHERUPDATES" ]] && OUTPUT="$OUTPUT\n\nOther updates:\n$OTHERUPDATES"
+
+if [[ "$UPDATECHECK" =~ "No new software available." ]]; then
+	echo "macOS is up to date"
 	exit 0
 
-elif [[ "$UPDATECHECK" =~ "macOS" ]]; then
-	echo "macOS updates are available: $UPDATECHECK"
-	exit 20
+elif [[ ! -z "$MACOSUPDATES" ]]; then
+	echo "$OUTPUT"
+	exit 2
 
-elif [[ "$UPDATECHECK" =~ "Security" ]]; then
-	echo "macOS updates are available: $UPDATECHECK"
-	exit 20
+elif [[ ! -z "$SECURITYUPDATES" ]]; then
+	echo "$OUTPUT"
+	exit 2
 
-elif [[ "$UPDATECHECK" =~ "connect" ]]; then
-	echo "$UPDATECHECK"
-	exit 20
-
-elif [[ "$UPDATECHECK" =~ "hostname" ]]; then
-	echo "$UPDATECHECK"
-	exit 20
-
-elif [[ "$UPDATECHECK" =~ "response" ]]; then
-	echo "$UPDATECHECK"
-	exit 20
-
-elif [[ "$UPDATECHECK" =~ "loading" ]]; then
-	echo "$UPDATECHECK"
-	exit 20
-
-elif [[ "$UPDATECHECK" =~ "connection" ]]; then
-	echo "$UPDATECHECK"
-	exit 20
-
-elif [[ "$UPDATECHECK" =~ "request" ]]; then
-	echo "$UPDATECHECK"
+elif [[ ! -z "$OTHERUPDATES" ]]; then
+	echo "$OUTPUT"
 	exit 20
 
 else
-	echo "macOS $PRODUCTVERSION ($BUILDVERSION) is up to date"
-	echo "Other software updates are available: $UPDATECHECK"
+	echo "Info:\n\n$UPDATECHECK"
 	exit 20
+
 fi

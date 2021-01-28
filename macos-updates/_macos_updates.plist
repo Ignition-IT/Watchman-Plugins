@@ -9,7 +9,7 @@
 	<key>PluginUUID</key>
 	<string>E475A6BC-39F5-4CF9-8A63-B9A241734092</string>
 	<key>PluginVersion</key>
-	<string>1.4.0.1</string>
+	<string>1.5.0.0</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>_macos_updates.plugin</string>
