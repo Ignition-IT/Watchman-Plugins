@@ -34,7 +34,7 @@ elif [ "$APPLEIDMANAGED" = "true" ]; then
 fi
 
 #data to report
-REPORT="Apple ID Information\nDisplay Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS\n$MDM"
+REPORT="Find My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS\n$MDM\n\nApple ID Information\nDisplay name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED"
 
 
 # if activation lock is enabled but no Apple ID is detected
