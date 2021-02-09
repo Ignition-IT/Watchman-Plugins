@@ -1,8 +1,12 @@
 #!/bin/sh
 
-# Activation Lock plugin v1.1.0.0
+# Activation Lock plugin v1.2.0.0
 # written by Ella Hansen for Ignition www.ignitionit.com
 
+# get MDM status
+MDM=$(profiles status -type enrollment)
+
+# get Find My Mac status
 FMMSTATUS=$(nvram -p | awk '/fmm-mobileme-token-FMM-BridgeHasAccount/{print $NF}')
 if [ "$FMMSTATUS" = "BridgeHasAccountValue" ]; then
 	FMMSTATUS="Enabled"
@@ -30,7 +34,7 @@ elif [ "$APPLEIDMANAGED" = "true" ]; then
 fi
 
 #data to report
-REPORT="Apple ID Information\nDisplay Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS"
+REPORT="Apple ID Information\nDisplay Name: $APPLEIDNAME\nEmail: $APPLEIDEMAIL\nManaged: $APPLEIDMANAGED\n\nFind My Mac: $FMMSTATUS\nActivation Lock: $ACTIVATIONLOCKSTATUS\n$MDM"
 
 
 # if activation lock is enabled but no Apple ID is detected
