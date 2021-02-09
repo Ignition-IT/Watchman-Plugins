@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Umbrella DNS plugin v1.3.0.1
+# Umbrella DNS plugin v1.3.1.0
 # written by ELla Hansen for Ignition www.ignitionit.com
 
 INSTALLED=$(test -e /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist && echo "Yes" || echo "No")
 
 if [ "$INSTALLED" = "No" ]; then
 	echo "Umbrella DNS not found"
-	exit 2
+	exit 20
 fi
 
 SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist && echo "Yes" || echo "No")
