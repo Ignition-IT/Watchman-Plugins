@@ -22,7 +22,7 @@ Activation Lock is disabled, but Find My Mac is enabled and unmanaged iCloud acc
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_fmm_info.png?raw=true)
 
 Pre-T2 chip Mac, or pre-Catalina macOS that doesn't support Activation Lock, 
-but Find My Mac is enabled and unmanaged iCloud account is signed in:
+but Find My Mac is enabled and unmanaged iCloud account is signed in: 
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_pre_t2_info.png?raw=true)
 
 ### Warning
