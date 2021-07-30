@@ -11,22 +11,27 @@ Activation Lock can be a major block for managed fleets of Macs. This plugin all
 ### All Clear
 
 No iCloud account is signed in and Find My Mac and Activation Lock are disabled:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_no_icloud_ok.png?raw=true)
 
 An unmanaged iCloud account is signed in, but Find My Mac and Activation Lock are disabled:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_ok.png?raw=true)
 
 ### Informational
 
 Activation Lock is disabled, but Find My Mac is enabled and unmanaged iCloud account is signed in:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_fmm_info.png?raw=true)
 
 Pre-T2 chip Mac, or pre-Catalina macOS that doesn't support Activation Lock:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_pre_t2_info.png?raw=true)
 
 ### Warning
 
 Activation Lock is enabled and an unmanaged iCloud account is signed in:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/activation_lock_enabled_warning.png?raw=true)
 
 
@@ -37,16 +42,19 @@ This plugin aims to replicate the functionality of the Windows Update plugin, bu
 ### All Clear
 
 macOS is up to date (within the major release installed):
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/macos_updates_ok.png?raw=true)
 
 ### Informational
 
 An error occurred while checking for updates:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/macos_updates_info.png?raw=true)
 
 ### Warning
 
 There are updates available:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/macos_updates_warning.png?raw=true)
 
 
@@ -57,6 +65,7 @@ This plugin aims to replicate the functionality of the User Accounts plugin for 
 ### All Clear
 
 A list of all user accounts on the computer:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/macos_user_accounts.png?raw=true)
 
 
@@ -67,11 +76,13 @@ This plugin shows the status of the SentinelOne agent installed on an endpoint. 
 ### All Clear
 
 SentinelOne is ready and enabled:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/sentinelone_ok.png?raw=true)
 
 ### Informational
 
 SentinelOne is either not ready, not enabled, or not installed:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/sentinelone_info.png?raw=true)
 
 ### Warning
@@ -86,16 +97,19 @@ This plugin reports the status of the Cisco Umbrella DNS agent installed on macO
 ### All Clear
 
 Umbrella is enabled:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/umbrella_dns_ok.png?raw=true)
 
 ### Informational
 
 Umbrella status is unknown:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/umbrella_dns_info.png?raw=true)
 
 ### Warning
 
 Umbrella has been disabled for longer than the specified grace period:
+
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/umbrella_dns_warning.png?raw=true)
 
 
