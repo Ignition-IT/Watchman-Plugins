@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Linux User Accounts plugin v1.0.0.0
+# written by ELla Hansen for Ignition www.ignitionit.com
+
+#set temp file
+USERLIST="/tmp/wm_user_accounts_$(date +%s)"
+echo "Current user" >> "$USERLIST"
+
+#get account info for specified username
+GETUSERINFO () {
+	local USERNAME="$1"
+	#get account name from username
+	local ACCOUNTNAME=$(grep -w $USERNAME /etc/passwd | sed -e s/.*:x:....:....://g | cut -d, -f1 | cut -d: -f1)
+
+	#check last login time
+	LASTLOGIN=$(last -1 $USERNAME | sed -e 's/.*    //g' | grep -vE '(wtmp)' | sed 's/  //g' | grep .)
+
+	#check user groups
+	USERGROUPS=$(grep -w $USERNAME /etc/group | grep -vE $USERNAME: | cut -d: -f1 | sed -z 's/\n/, /g;s/, $/\n/')
+
+	#add info to file
+	echo "\nFull Name: $ACCOUNTNAME\nUsername: $USERNAME\nGroups: $USERGROUPS\nLast Login: $LASTLOGIN" >> "$USERLIST"
+}
+
+#get current username
+CURRENTUSER=$(users)
+GETUSERINFO $CURRENTUSER
+echo "\nOther users" >> "$USERLIST"
+
+#get full list of usernames with UID > 1000
+USERNAMES=$(grep -w 'x:1...' /etc/passwd | cut -d: -f1 | grep -vE $CURRENTUSER)
+
+# run the list
+for USERNAME in $(echo $USERNAMES); do
+	GETUSERINFO $USERNAME
+done
+
+#print the output from the temp file
+cat "$USERLIST"
+
+#clean up the temp file
+rm "$USERLIST" 2>/dev/null
+
+#return OK
+exit 0
