@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# SentinelOne Ubuntu plugin v1.0.0.0
+# written by Ella Hansen for Ignition www.ignitionit.com
+# tested on Ubuntu 21.04 - no guarantee for other distros
+
+UUID=$(/opt/sentinelone/bin/sentinelctl management uuid get 2>/dev/null)
+
+if [ -z "${UUID##*not found*}" ]; then
+	echo "SentinelOne agent not found"
+	exit 20
+fi
+
+CONNECTIVITY=$(/opt/sentinelone/bin/sentinelctl management status | grep -o 'Connectivity.*' | cut -d"y" -f2 | sed 's: ::g')
+ANTITAMPER=$(/opt/sentinelone/bin/sentinelctl management status | grep -o 'Anti Tamper.*' | cut -d"r" -f2 | sed 's: ::g')
+
+VERSION=$(/opt/sentinelone/bin/sentinelctl version | grep -o 'Agent version:.*' | cut -d: -f2 | sed 's: ::g')
+
+#INFECTED=$(sentinelctl status --filters agent | grep -o 'Infected:.*' | cut -d: -f2 | sed 's: ::g')
+
+SCANSTATUS=$(/opt/sentinelone/bin/sentinelctl scan status | grep -o 'Scan status:.*' | cut -d: -f2 | sed 's: ::g')
+#LASTSCAN=$(/opt/sentinelone/bin/sentinelctl scan status | grep -o 'Start time:.*' | cut -d: -f2 | sed 's:::g')
+
+if [ "$ANTITAMPER" = "On" ] && [ "$CONNECTIVITY" = "On" ] && [ "$SCANSTATUS" = "finished" ]; then
+	EXIT=0
+
+elif [ "$SCANSTATUS" == "started" ]; then
+	EXIT=20
+
+elif [ "$CONNECTIVITY" != "On" ]; then
+	EXIT=20
+
+elif [ "$ANTITAMPER" != "On" ]; then
+	EXIT=2
+
+else
+	EXIT=0
+fi
+
+echo "Version: $VERSION\nConnectivity: $CONNECTIVITY\nAnti tamper: $ANTITAMPER\nScan status: $SCANSTATUS\n$UUID"
+
+exit $EXIT

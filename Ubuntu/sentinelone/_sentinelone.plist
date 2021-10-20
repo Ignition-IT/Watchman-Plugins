@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginName</key>
+	<string>SentinelOne</string>
+	<key>PluginSlug</key>
+	<string>sentinelone</string>
+	<key>PluginUUID</key>
+	<string>6B006534-1EA5-49F9-A9E0-77643D7B89D2</string>
+	<key>PluginVersion</key>
+	<string>1.0.0.0</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>_sentinelone.plugin</string>
+	</array>
+</dict>
+</plist>
