@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# SentinelOne Ubuntu plugin v1.0.0.0
+# SentinelOne Ubuntu plugin v1.0.1.0
 # written by Ella Hansen for Ignition www.ignitionit.com
 # tested on Ubuntu 21.04 - no guarantee for other distros
 
@@ -24,7 +24,7 @@ SCANSTATUS=$(/opt/sentinelone/bin/sentinelctl scan status | grep -o 'Scan status
 if [ "$ANTITAMPER" = "On" ] && [ "$CONNECTIVITY" = "On" ] && [ "$SCANSTATUS" = "finished" ]; then
 	EXIT=0
 
-elif [ "$SCANSTATUS" == "started" ]; then
+elif [ "$SCANSTATUS" = "started" ]; then
 	EXIT=20
 
 elif [ "$CONNECTIVITY" != "On" ]; then

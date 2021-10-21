@@ -1,20 +1,22 @@
 #!/bin/sh
 
-#Linux Software Updates plugin v1.0.0.0
+#Linux Software Updates plugin v1.0.1.0
 #written by ELla Hansen for Ignition www.ignitionit.com
 
 # Sets UPDATECHECK to the stderr output and discards the stdout
-UPDATECHECK=$(/usr/lib/update-notifier/apt-check --human-readable | tail -n +2)
+UPDATECHECK=$(apt list --upgradeable 2>/dev/null)
+# remove first line (Listing... Done)
+UPDATES=$(echo "$UPDATECHECK" | tail -n +2)
 # find lines with "Security"
 SECURITYUPDATES=$(echo "$UPDATES" | grep 'security')
 # find lines without "macOS" or "Security"
-OTHERUPDATES=$(echo "$UPDATES" | grep -vE '(security)')
+OTHERUPDATES=$(echo "$UPDATES" | grep -vE 'security')
 
 OUTPUT="Updates are available" 
 [ ! -z "$SECURITYUPDATES" ] && OUTPUT="$OUTPUT\n\nSecurity updates:\n$SECURITYUPDATES"
 [ ! -z "$OTHERUPDATES" ] && OUTPUT="$OUTPUT\n\nOther updates:\n$OTHERUPDATES"
 
-if [ "$UPDATECHECK" = "" ]; then
+if [ "$UPDATECHECK" = "Listing... Done" ]; then
 	echo "All packages are up to date"
 	exit 0
 
