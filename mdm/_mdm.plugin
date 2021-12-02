@@ -1,0 +1,35 @@
+#!/bin/sh
+
+#MDM plugin v1.1.0.0
+#written by Ella Hansen for Ignition www.ignitionit.com
+
+SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/_mdm_settings.plist && echo "Yes" || echo "No")
+
+if [ "$SETTINGS" = "No" ]; then
+	/usr/libexec/PlistBuddy -c "Add :MDM_Warning integer 2" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :DEP_Warning integer 20" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
+fi
+
+MDMWARNING=$(/usr/libexec/PlistBuddy -c "Print :MDM_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
+DEPWARNING=$(/usr/libexec/PlistBuddy -c "Print :DEP_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
+
+MDM=$(profiles status -type enrollment)
+ENROLLED=$(echo "$MDM"  | grep "MDM enrollment:" | cut -d" " -f3)
+DEP=$(echo "$MDM"  | grep "Enrolled via DEP:" | cut -d" " -f4)
+
+if [ "$ENROLLED" = "Yes" ] && [ "$DEP" = "Yes" ]; then
+	EXIT=0
+
+elif [ "$ENROLLED" = "Yes" ] && [ "$DEP" = "No" ]; then
+	EXIT=$DEPWARNING
+
+elif [ "$ENROLLED" = "No" ]; then
+	EXIT=$MDMWARNING
+
+else
+	exit 0
+fi
+
+echo "$MDM"
+
+exit $EXIT

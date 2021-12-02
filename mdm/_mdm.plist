@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>PluginName</key>
-	<string>AirWatch</string>
+	<string>MDM</string>
 	<key>PluginSlug</key>
-	<string>airwatch</string>
+	<string>mdm</string>
 	<key>PluginUUID</key>
 	<string>2761E5A2-6D4B-4687-AA42-2D396AE2FC97</string>
 	<key>PluginVersion</key>
-	<string>1.0.0.1</string>
+	<string>1.1.0.0</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>_airwatch.plugin</string>
+		<string>_mdm.plugin</string>
 	</array>
 </dict>
 </plist>
