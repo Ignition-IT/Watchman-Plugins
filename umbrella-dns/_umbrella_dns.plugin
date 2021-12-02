@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Umbrella DNS plugin v1.3.1.0
+# Umbrella DNS plugin v1.3.1.1
 # written by ELla Hansen for Ignition www.ignitionit.com
 
 INSTALLED=$(test -e /Library/Application\ Support/OpenDNS\ Roaming\ Client/erc_state.plist && echo "Yes" || echo "No")
@@ -10,7 +10,7 @@ if [ "$INSTALLED" = "No" ]; then
 	exit 20
 fi
 
-SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist && echo "Yes" || echo "No")
+SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist && echo "Yes" || echo "No")
 
 if [ "$SETTINGS" = "No" ]; then
 	/usr/libexec/PlistBuddy -c "Add :lastEnabled date `date`" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist 2>/dev/null
@@ -25,8 +25,8 @@ TUNNEL=$(/usr/libexec/PlistBuddy -c "Print :tunnelStatus" /Library/Application\ 
 # save the exit code, which indicates success or failure
 TUNNELSTATUS=$?
 
-LASTENABLED=$(/usr/libexec/PlistBuddy -c "Print :lastEnabled" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null)
-HOURSALLOWED=$(/usr/libexec/PlistBuddy -c "Print :hoursAllowed" /Library/MonitoringClient/PluginSupport/umbrella_dns_settings.plist 2>/dev/null)
+LASTENABLED=$(/usr/libexec/PlistBuddy -c "Print :lastEnabled" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist 2>/dev/null)
+HOURSALLOWED=$(/usr/libexec/PlistBuddy -c "Print :hoursAllowed" /Library/MonitoringClient/PluginSupport/_umbrella_dns_settings.plist 2>/dev/null)
 # convert to unix timestamps
 LASTENABLEDTS=$((`date -j -f "%a %b %d %T %Z %Y" "$LASTENABLED" "+%s"` - 3600 ))
 LASTENABLEDDATE=$(date -j -r "$LASTENABLEDTS" "+%D %l:%M%p")

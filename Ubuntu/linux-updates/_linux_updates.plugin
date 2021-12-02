@@ -16,7 +16,7 @@ OUTPUT="Updates are available"
 [ ! -z "$SECURITYUPDATES" ] && OUTPUT="$OUTPUT\n\nSecurity updates:\n$SECURITYUPDATES"
 [ ! -z "$OTHERUPDATES" ] && OUTPUT="$OUTPUT\n\nOther updates:\n$OTHERUPDATES"
 
-if [ "$UPDATECHECK" = "Listing... Done" ]; then
+if [ "$UPDATECHECK" = "Listing..." ]; then
 	echo "All packages are up to date"
 	exit 0
 
