@@ -1,0 +1,7 @@
+[{
+  "name": "MDM",
+  "slug": "mdm",
+  "author": "Ignition",
+  "toRun": "MDM.bat",
+  "uuid": "2761E5A2-6D4B-4687-AA42-2D396AE2FC97"
+}]
