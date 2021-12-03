@@ -6,8 +6,8 @@
 SETTINGS=$(test -e /Library/MonitoringClient/PluginSupport/_mdm_settings.plist && echo "Yes" || echo "No")
 
 if [ "$SETTINGS" = "No" ]; then
-	/usr/libexec/PlistBuddy -c "Add :MDM_Warning integer 2" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
-	/usr/libexec/PlistBuddy -c "Add :DEP_Warning integer 20" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :MDM_Warning integer 20" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
+	/usr/libexec/PlistBuddy -c "Add :DEP_Warning integer 0" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
 fi
 
 MDMWARNING=$(/usr/libexec/PlistBuddy -c "Print :MDM_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
