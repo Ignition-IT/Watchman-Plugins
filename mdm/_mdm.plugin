@@ -1,15 +1,21 @@
 #!/bin/sh
 
-#MDM plugin v1.1.1.0
+#MDM plugin v1.1.2.0
 #written by Ella Hansen for Ignition www.ignitionit.com
 
-DEPWARNING=$(/usr/libexec/PlistBuddy -c "Print :DEP_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
 MDMWARNING=$(/usr/libexec/PlistBuddy -c "Print :MDM_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
 # Save the exit code, which indicates success or failure
-SETTINGS=$?
+MDMSETTINGS=$?
 
-if [ SETTINGS != 0 ]; then
+if [ MDMSETTINGS != 0 ]; then
 	/usr/libexec/PlistBuddy -c "Add :MDM_Warning integer 20" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
+fi
+
+DEPWARNING=$(/usr/libexec/PlistBuddy -c "Print :DEP_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
+# Save the exit code, which indicates success or failure
+DEPSETTINGS=$?
+
+if [ DEPSETTINGS != 0 ]; then
 	/usr/libexec/PlistBuddy -c "Add :DEP_Warning integer 0" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null
 fi
 
