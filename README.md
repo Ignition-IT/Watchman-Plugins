@@ -69,6 +69,27 @@ A list of all user accounts on the computer:
 ![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/macos_user_accounts.png?raw=true)
 
 
+## MDM
+
+This plugin shows the MDM enrollment status of a computer, whether it was enrolled through DEP, and what MDM server it's enrolled with. Both `MDM enrollment` and `Enrolled via DEP` have configurable exit codes via the \_mdm_settings.plist file. By default, this plugin will will return exit code 20 (Informational) if the computer is not enrolled in MDM, and return exit code 0 (OK) if it's not enrolled via DEP. 
+
+To change the exit codes, simply push these commands to your fleet (or use the scripts in the `plugin-settings` folder):
+MDM: `/usr/libexec/PlistBuddy -c "Set :MDM_Warning 2" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist` (sets MDM not enrolled to Warning)
+DEP: `/usr/libexec/PlistBuddy -c "Set :DEP_Warning 20" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist` (sets not enrolled via DEP to Informational)
+
+### All Clear
+
+Computer is enrolled in MDM:
+
+![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/mdm_ok.png?raw=true)
+
+### Informational
+
+Computer is not enrolled in MDM:
+
+![](https://github.com/Ignition-IT/Watchman-Plugins/blob/master/images/mdm_info.png?raw=true)
+
+
 ## SentinelOne
 
 This plugin shows the status of the SentinelOne agent installed on an endpoint. There are versions for both macOS and Windows. It reports the version, ready status, protection status, infection status, and UUID of the endpoint.
