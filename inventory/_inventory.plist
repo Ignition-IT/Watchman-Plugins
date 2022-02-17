@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginName</key>
+	<string>Inventory</string>
+	<key>PluginSlug</key>
+	<string>inventory</string>
+	<key>PluginUUID</key>
+	<string>E20CE26E-B37B-4DEE-9B94-A48737D5AC5A</string>
+	<key>PluginVersion</key>
+	<string>1.0.0.0</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>_inventory.plugin</string>
+	</array>
+</dict>
+</plist>
