@@ -1,10 +1,22 @@
 #!/bin/sh
 
-#macOS Updates plugin v1.5.0.0
-#written by ELla Hansen for Ignition www.ignitionit.com
+# macOS Updates plugin v1.6.0.0
+# written by ELla Hansen for Ignition www.ignitionit.com
 
 # Sets UPDATECHECK to the stderr output and discards the stdout
-UPDATECHECK=$((softwareupdate -l) 2>&1)
+# put softwareupdate in background ; wait 20 seconds ; if softwareupdate hasn't finished, kill
+UPDATECHECK=$((softwareupdate -l &) ; sleep 20 ; killall softwareupdate 2>&1)
+
+# if softwareupdate is stuck, disable, re-enable, and restart, then check again
+if [ -z "$UPDATECHECK" ]; then
+	(/bin/launchctl disable system/com.apple.softwareupdated) 2>&1
+	sleep 5
+	(sudo /bin/launchctl enable system/com.apple.softwareupdated) 2>&1
+	sleep 5
+	(sudo /bin/launchctl kickstart -k system/com.apple.softwareupdated) 2>&1
+	UPDATECHECK=$((softwareupdate -l & ) ; sleep 20 ; killall softwareupdate 2>&1)
+fi
+
 # Only return lines that start with "*", remove "* ", "Label: ", and "-"
 UPDATES=$(echo "$UPDATECHECK" | grep '\*' | sed -e 's/*/•/g' -e 's/Label: //g' -e 's/- //g')
 # find lines with "macOS"
