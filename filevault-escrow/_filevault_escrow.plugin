@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# FileVault Escrow plugin v1.0.1.0
+# written by Jeff Mann for Ignition www.ignitionit.com
+
+# check for FV escrow file
+FVCHECK="$(test -e /var/db/FileVaultPRK.dat && echo "Yes" || echo "No")"
+
+if [ "$FVCHECK" = "Yes" ]; then
+echo "FileVault key has been escrowed."
+exit 0
+
+else
+echo "FileVault key has NOT been escrowed."
+exit 2
+fi
