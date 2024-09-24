@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Datto File Protection plugin v1.0.0.0
+# written by Ella Hansen for Ignition www.ignitionit.com
+
+CURRENTUSER=$(/usr/bin/stat -f%Su /dev/console)
+INSTALLED=$(test -e /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml && echo "Yes" || echo "No")
+
+if [ "$INSTALLED" = "No" ]; then
+	echo "Umbrella DNS not found"
+	exit 20
+fi
+
+FULLNAME=$(/usr/libexec/PlistBuddy -c "Print :full_name" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
+EMAIL=$(/usr/libexec/PlistBuddy -c "Print :email" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
+USERID=$(/usr/libexec/PlistBuddy -c "Print :user_id" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
+TEAMNAME=$(/usr/libexec/PlistBuddy -c "Print :team_name" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
+RCID=$(/usr/libexec/PlistBuddy -c "Print :rcid" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
+
+AGENONLINE=$(xmllint --xpath '//value[@name="agent-online"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+AGENTSTART=$(xmllint --xpath '//value[@name="agent-start"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+AGENTLOGON=$(xmllint --xpath '//value[@name="agent-logon-time"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+LASTBACKUP=$(xmllint --xpath '//value[@name="backup-last-complete"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+FILESREMAINING=$(xmllint --xpath '//value[@name="backup-files-remaining"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+BYTESREMAINING=$(xmllint --xpath '//value[@name="backup-bytes-remaining"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+PERCENTCOMPLETE=$(xmllint --xpath '//value[@name="backup-percent-complete"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+DEPLOYMENTSTATUS=$(xmllint --xpath '//value[@name="setup-deployment-status"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+
+NOW=$(date +%s)
+STARTDATE=$(date -r $AGENTSTART +'%m/%d/%y %I:%M%p')
+LOGONDATE=$(date -r $AGENTLOGON +'%m/%d/%y %I:%M%p')
+BACKUPDATE=$(date -r $LASTBACKUP +'%m/%d/%y %I:%M%p')
+
+REPORT="Connection Status: $AGENONLINE\nBackup Status: $PERCENTCOMPLETE%\nFiles Remaining: $FILESREMAINING\nBytes Remaining: $BYTESREMAINING\nLast Backup: $BACKUPDATE\nAgent Started: $STARTDATE\n\nUser: $FULLNAME\nEmail: $EMAIL\nUser ID: $USERID\nTeam: $TEAMNAME\nRC ID: $RCID"
+
+echo "$REPORT"
+exit 0

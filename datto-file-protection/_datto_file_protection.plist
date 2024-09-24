@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PluginName</key>
+	<string>Datto File Protection</string>
+	<key>PluginSlug</key>
+	<string>datto-file-protection</string>
+	<key>PluginUUID</key>
+	<string>5F23F820-CC43-4263-8A88-2E0BD5FA4ABA</string>
+	<key>PluginVersion</key>
+	<string>1.0.0.0</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>_datto_file_protection.plugin</string>
+	</array>
+</dict>
+</plist>
