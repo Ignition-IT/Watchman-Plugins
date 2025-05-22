@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#MDM plugin v1.1.2.0
+#MDM plugin v1.2.0.0
 #written by Ella Hansen for Ignition www.ignitionit.com
 
 MDMWARNING=$(/usr/libexec/PlistBuddy -c "Print :MDM_Warning" /Library/MonitoringClient/PluginSupport/_mdm_settings.plist 2>/dev/null)
@@ -22,6 +22,7 @@ fi
 MDM=$(profiles status -type enrollment)
 ENROLLED=$(echo "$MDM"  | grep "MDM enrollment:" | cut -d" " -f3)
 DEP=$(echo "$MDM"  | grep "Enrolled via DEP:" | cut -d" " -f4)
+PROFILES=$(profiles -P -v | grep 'name:' | sed 's/^.*name:[[:space:]]*//' | sort)
 
 if [ "$ENROLLED" = "Yes" ] && [ "$DEP" = "Yes" ]; then
 	EXIT=0
@@ -36,6 +37,6 @@ else
 	exit 0
 fi
 
-echo "$MDM"
+echo "$MDM\n\nProfiles:\n$PROFILES"
 
 exit $EXIT

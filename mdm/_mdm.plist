@@ -9,7 +9,7 @@
 	<key>PluginUUID</key>
 	<string>d83494df-9406-4ade-a791-23b1c1fda07c</string>
 	<key>PluginVersion</key>
-	<string>1.1.2.0</string>
+	<string>1.2.0.0</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>_mdm.plugin</string>
