@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Datto File Protection plugin v1.0.0.0
+# Datto File Protection plugin v1.0.1.1
 # written by Ella Hansen for Ignition www.ignitionit.com
 
 CURRENTUSER=$(/usr/bin/stat -f%Su /dev/console)
 INSTALLED=$(test -e /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml && echo "Yes" || echo "No")
 
 if [ "$INSTALLED" = "No" ]; then
-	echo "Umbrella DNS not found"
+	echo "Datto File Protection agent not found"
 	exit 20
 fi
 
@@ -17,21 +17,35 @@ USERID=$(/usr/libexec/PlistBuddy -c "Print :user_id" /Users/$CURRENTUSER/Library
 TEAMNAME=$(/usr/libexec/PlistBuddy -c "Print :team_name" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
 RCID=$(/usr/libexec/PlistBuddy -c "Print :rcid" /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/user_info.plist 2>/dev/null)
 
-AGENONLINE=$(xmllint --xpath '//value[@name="agent-online"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+RCID=$(xmllint --xpath 'string(//status-report/@rcid)' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+USERID=$(xmllint --xpath '//value[@name="agent-account-name"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+AGENTVERSION=$(xmllint --xpath '//value[@name="agent-version"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+AGENTONLINE=$(xmllint --xpath '//value[@name="agent-online"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 AGENTSTART=$(xmllint --xpath '//value[@name="agent-start"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 AGENTLOGON=$(xmllint --xpath '//value[@name="agent-logon-time"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 LASTBACKUP=$(xmllint --xpath '//value[@name="backup-last-complete"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 FILESREMAINING=$(xmllint --xpath '//value[@name="backup-files-remaining"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 BYTESREMAINING=$(xmllint --xpath '//value[@name="backup-bytes-remaining"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
-PERCENTCOMPLETE=$(xmllint --xpath '//value[@name="backup-percent-complete"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+TOTALBYTES=$(xmllint --xpath '//value[@name="backup-numbytes"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+TOTALFILES=$(xmllint --xpath '//value[@name="backup-numfiles"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
 DEPLOYMENTSTATUS=$(xmllint --xpath '//value[@name="setup-deployment-status"]/text()' /Users/$CURRENTUSER/Library/Preferences/com.datto.dfp/Status\ Report.xml)
+
+if (( $TOTALBYTES > 0 )); then
+	PERCENTCOMPLETE=$(printf "%.*f\n" 0 "$(( (($TOTALBYTES - $BYTESREMAINING) / $TOTALBYTES) * 100 ))")
+	TOTALGB=$(printf "%.*f\n" 0 "$(( $TOTALBYTES / 1000000000 ))")
+	GBREMAINING=$(printf "%.*f\n" 0 "$(( $BYTESREMAINING / 1000000000 ))")
+else
+	PERCENTCOMPLETE=100
+	TOTALGB=0
+	GBREMAINING=0
+fi
 
 NOW=$(date +%s)
 STARTDATE=$(date -r $AGENTSTART +'%m/%d/%y %I:%M%p')
 LOGONDATE=$(date -r $AGENTLOGON +'%m/%d/%y %I:%M%p')
 BACKUPDATE=$(date -r $LASTBACKUP +'%m/%d/%y %I:%M%p')
 
-REPORT="Connection Status: $AGENONLINE\nBackup Status: $PERCENTCOMPLETE%\nFiles Remaining: $FILESREMAINING\nBytes Remaining: $BYTESREMAINING\nLast Backup: $BACKUPDATE\nAgent Started: $STARTDATE\n\nUser: $FULLNAME\nEmail: $EMAIL\nUser ID: $USERID\nTeam: $TEAMNAME\nRC ID: $RCID"
+REPORT="Connection Status: $AGENTONLINE\nBackup Status: $PERCENTCOMPLETE%\nSelected Size: $TOTALGB GB\nSelected Files: $TOTALFILES\nRemaining Size: $GBREMAINING GB\nRemaining Files: $FILESREMAINING\nLast Backup: $BACKUPDATE\nAgent Started: $STARTDATE\nAgent Version: $AGENTVERSION\n\nTeam: $TEAMNAME\nUser: $FULLNAME\nEmail: $EMAIL\nUser ID: $USERID\nDevice ID: $RCID"
 
 echo "$REPORT"
 exit 0
